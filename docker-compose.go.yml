@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  calendar-bot:
+    build: .
+    image: calendar-assistant-bot:latest 
+    container_name: calendar-assistant-bot
+    restart: unless-stopped
+    environment:
+      - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - GOOGLE_CREDENTIALS_FILE=/app/credentials/google-credentials.json
+      - GOOGLE_CALENDAR_ID=${GOOGLE_CALENDAR_ID}
+      - PORT=8080
+    volumes:
+      - ./credentials:/app/credentials:ro
+      - ./logs:/app/logs
+    ports:
+      - "8080:8080"
+    networks:
+      - n8n-network
+
+networks:
+  n8n-network:
+    driver: bridge
+
+volumes:
+  data:
+  logs:
